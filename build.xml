@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name= "BuildTest" basedir= "." default= "main">
+
+  <target name="main" depends= "init,phpcs,phpmd,phpcpd"></target>
+
+  <!-- init -->
+  <target name="init">
+    <delete dir= "./reports" includeemptydirs= "true" />
+    <mkdir dir= "./reports" />
+  </target>
+
+  <!-- phpcs -->
+  <target name="phpcs">
+    <exec executable= "phpcs" output= "reports/phpcs.xml">
+      <arg line= "--report=checkstyle ./*.php" />
+    </exec>
+  </target>
+
+  <!-- phpmd -->
+  <target name="phpmd">
+    <phpmd rulesets= "cleancode,codesize,controversial,design,naming,unusedcode">
+      <fileset dir= "./">
+        <include name= "**/*.php" />
+        <exclude name= "**/*Test.php" />
+      </fileset>
+      <formatter type= "xml" outfile= "reports/phpmd.xml" />
+    </phpmd>
+  </target>
+
+  <!-- phpcpd -->
+  <target name="phpcpd">
+    <phpcpd>
+      <fileset dir= "./">
+        <include name= "**/*.php" />
+        <exclude name= "**/*Test.php" />
+      </fileset>
+      <formatter type= "pmd" outfile= "reports/phpcpd.xml" />
+    </phpcpd>
+  </target>
+
+</project>
